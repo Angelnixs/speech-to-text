@@ -50,8 +50,48 @@ if ("webkitSpeechRecognition" in window) {
   };
   // Set the onClick property of the stop button
   document.querySelector("#stop").onclick = () => {
-      // Stop the Speech Recognition
-      speechRecognition.stop();
+    speechRecognition.stop();
+
+
+    // ====================
+    // ====================
+    // ====================
+    // let open_ai_response;
+
+    // openai_test();
+
+    // async function openai_test() {
+    
+    //     var url = "https://api.openai.com/v1/engines/text-ada-001/completions";
+
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open("POST", url);
+
+    //     xhr.setRequestHeader("Content-Type", "application/json");
+    //     xhr.setRequestHeader("Authorization", "Bearer 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");
+
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState === 4) {
+    //             console.log(xhr.status);
+    //             console.log(xhr.responseText);
+    //             open_ai_response = xhr.responseText;
+    //             console.log(open_ai_response);
+    //         }};
+
+    //     var data = `{
+    //         "prompt": "How are you today?",
+    //         "temperature": 0.7,
+    //         "max_tokens": 150,
+    //         "top_p": 1,
+    //         "frequency_penalty": 0.75,
+    //         "presence_penalty": 0
+    //     }`;
+
+    //     xhr.send(data);
+    // }
+    // ====================
+    // ====================
+    // ====================
   };
 } else {
   console.log("Speech Recognition Not Available");
