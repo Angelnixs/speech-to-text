@@ -4,6 +4,7 @@ if ("webkitSpeechRecognition" in window) {
   var meter = null;
   var recordingStarted = false;
   var WIDTH = 500;
+  let timeoutHandle;
 
   // String for the Final Transcript
   let final_transcript = "";
@@ -55,45 +56,48 @@ if ("webkitSpeechRecognition" in window) {
   };
   // Set the onClick property of the stop button
   document.querySelector("#stop").onclick = () => {
-    speechRecognition.stop();
-    recordingStarted = false;
-    // ====================
-    // ====================
-    // ====================
-    let open_ai_response;
-    console.time("chatgpt");
-    sendMessageChatGPT();
-    
+    if (recordingStarted) {
+      recordingStarted = false;
 
-    async function sendMessageChatGPT() {
-        // models: 'text-curie-001', 'text-ada-001', 'text-babbage-001',
+      speechRecognition.stop();
+      // ====================
+      // ====================
+      // ====================
+      let open_ai_response;
+      console.time("chatgpt");
+      sendMessageChatGPT();
+      
 
-        var url = "https://api.openai.com/v1/engines/text-babbage-001/completions";
+      async function sendMessageChatGPT() {
+          // models: 'text-curie-001', 'text-ada-001', 'text-babbage-001',
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
+          var url = "https://api.openai.com/v1/engines/text-babbage-001/completions";
 
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("Authorization", "Bearer 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");
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url);
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                open_ai_response = xhr.responseText;
-                const the_response = JSON.parse(open_ai_response).choices[0].text
-                const msg = the_response.replace(/(\r\n|\n|\r)/gm, "");
-                console.timeEnd("chatgpt");
-                console.time("playht")
-                convertToAudio(msg);
-            }
-        };
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.setRequestHeader("Authorization", "Bearer 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");
 
-        var data = `{
-            "prompt": "Cual es la mejor manera de manejar una empresa?",
-            "temperature": 0.3,
-            "max_tokens": 150
-        }`;
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4) {
+                  open_ai_response = xhr.responseText;
+                  const the_response = JSON.parse(open_ai_response).choices[0].text
+                  const msg = the_response.replace(/(\r\n|\n|\r)/gm, "");
+                  console.timeEnd("chatgpt");
+                  console.time("playht")
+                  convertToAudio(msg);
+              }
+          };
 
-        xhr.send(data);
+          var data = `{
+              "prompt": "Cual es la mejor manera de manejar una empresa?",
+              "temperature": 0.3,
+              "max_tokens": 150
+          }`;
+
+          xhr.send(data);
+      }
     }
     // ====================
     // ====================
@@ -183,12 +187,21 @@ if ("webkitSpeechRecognition" in window) {
       }
   
     }
-    $("#volumenumber").html(`<span>${pitchVolume.toFixed(1)}</span>`);
+    $("#volumenumber").html(`<span>${pitchVolume.toFixed(1)}</span>`);    
     // Update width
     document.getElementById('voiceVolume').style.width = width+'%';
     setTimeout(function(){
+      if(recordingStarted){
+        if(parseInt(pitchVolume) < 15){
+          timeoutHandle = setTimeout(function(){
+            $("#stop").trigger("click")
+          }, 2000);
+        }else{
+          window.clearTimeout(timeoutHandle);
+        }
+      }
       rafID = window.requestAnimationFrame( drawLoop );
-    }, 1000 );
+    }, 200 );
   }
 } else {
   console.log("Speech Recognition Not Available");
