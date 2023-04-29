@@ -26,7 +26,10 @@
     <p id="status" class="lead mt-3" style="display: none">Listening...</p>
   </div>
   <div id="responses" class="mt-4">
-
+    <audio id="audioctrl" controls autoplay>
+      <source id="audio-0" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
   </div>
 </body>
 <script src="./language.js"></script>
@@ -40,20 +43,13 @@
     });
 
     socket.on('test', ({ metadata }) => {
-      let html = '';
-      metadata.output.forEach((element, idx) => {
-        html += `
-        <audio id="audio-${idx}" controls>
-          <source src="${element}" type="audio/mpeg">
-          Your browser does not support the audio tag.
-        </audio>
-        `
-      });
+      if(metadata.progress === 100) {
+        console.timeEnd('responsetime');
 
-      $('#responses').html(html);
-
-      $("#audio-0")[0].play();
-      console.log($("#audio-0"))
+        $("#audio-0").attr('src', metadata.output[0])
+        $("#audioctrl")[0].pause();
+        $("#audioctrl")[0].load();
+      }
     });
   })
 </script>

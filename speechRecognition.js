@@ -52,47 +52,76 @@ if ("webkitSpeechRecognition" in window) {
   document.querySelector("#stop").onclick = () => {
     speechRecognition.stop();
 
-
+    console.time('responsetime');
     // ====================
     // ====================
     // ====================
-    // let open_ai_response;
-
-    // openai_test();
-
-    // async function openai_test() {
+    let open_ai_response;
+    console.time("chatgpt");
+    sendMessageChatGPT();
     
-    //     var url = "https://api.openai.com/v1/engines/text-ada-001/completions";
 
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open("POST", url);
+    async function sendMessageChatGPT() {
+        // models: 'text-curie-001', 'text-ada-001', 'text-babbage-001',
 
-    //     xhr.setRequestHeader("Content-Type", "application/json");
-    //     xhr.setRequestHeader("Authorization", "Bearer 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");
+        var url = "https://api.openai.com/v1/engines/text-babbage-001/completions";
 
-    //     xhr.onreadystatechange = function () {
-    //         if (xhr.readyState === 4) {
-    //             console.log(xhr.status);
-    //             console.log(xhr.responseText);
-    //             open_ai_response = xhr.responseText;
-    //             console.log(open_ai_response);
-    //         }};
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
 
-    //     var data = `{
-    //         "prompt": "How are you today?",
-    //         "temperature": 0.7,
-    //         "max_tokens": 150,
-    //         "top_p": 1,
-    //         "frequency_penalty": 0.75,
-    //         "presence_penalty": 0
-    //     }`;
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Authorization", "Bearer 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");
 
-    //     xhr.send(data);
-    // }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                open_ai_response = xhr.responseText;
+                const the_response = JSON.parse(open_ai_response).choices[0].text
+                const msg = the_response.replace(/(\r\n|\n|\r)/gm, "");
+                console.timeEnd("chatgpt");
+                console.time("playht")
+                convertToAudio(msg);
+            }
+        };
+
+        var data = `{
+            "prompt": "Cual es la mejor manera de manejar una empresa?",
+            "temperature": 0.3,
+            "max_tokens": 150
+        }`;
+
+        xhr.send(data);
+    }
     // ====================
     // ====================
     // ====================
   };
+
+  let playht_response;
+  async function convertToAudio(message) {
+    var url = "https://play.ht/api/v1/convert";
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Authorization", "Bearer e0f873aeffa042f89b0da69b2abd56a0");
+    xhr.setRequestHeader("X-USER-ID", "pnU7CtrkObYjzwm8uWt7f20Wx4H3");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            playht_response = xhr.responseText;
+            console.timeEnd("playht")
+        }
+    };
+
+    var data = `{
+        "content": ["${message}"],
+        "voice": "es-CO-GonzaloNeural",
+        "preset": "real-time",
+        "speed": 1.2
+    }`;
+
+    xhr.send(data);
+}
 } else {
   console.log("Speech Recognition Not Available");
 }

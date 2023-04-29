@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Speechify</title>
+  </head>
+  <body>
+    <article>
+      THIS IS A TEST
+    </article>
+    <script type="module">
+      import(
+        "https://storage.googleapis.com/speechify-api-cdn/speechifyapi.min.mjs"
+      ).then(async (speechifyWidget) => {
+        console.log('entro')
+        // this parent element for your article or listenable content
+        const articleRootElement = document.querySelector("article");
+
+        const widget = speechifyWidget.makeSpeechifyExperience({
+          rootElement: articleRootElement,
+          useSpeechifyRoot: true
+        });
+        await widget.mount();
+      });
+    </script>
+  </body>
+</html>
