@@ -77,7 +77,7 @@ if ("webkitSpeechRecognition" in window) {
           xhr.open("POST", url);
 
           xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.setRequestHeader("Authorization", "Bearer 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");
+          xhr.setRequestHeader("Authorization", "Bearer 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");
 
           xhr.onreadystatechange = function () {
               if (xhr.readyState === 4) {

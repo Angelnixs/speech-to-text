@@ -5,8 +5,9 @@
     <title>Speechify</title>
   </head>
   <body>
+    <div id="speechify-root"></div>
     <article>
-      THIS IS A TEST
+      ESTA ES UNA PRUEBA EN ESPAÑOL
     </article>
     <script type="module">
       import(
@@ -18,9 +19,12 @@
 
         const widget = speechifyWidget.makeSpeechifyExperience({
           rootElement: articleRootElement,
-          useSpeechifyRoot: true
+          useSpeechifyRoot: true,
         });
         await widget.mount();
+        setTimeout(async () => {
+          await widget.hideInlinePlayer();
+        }, 200);
       });
     </script>
   </body>

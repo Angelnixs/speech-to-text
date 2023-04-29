@@ -66,11 +66,11 @@
 <script src="./volume-meter.js"></script>
 <script>
   $(document).on('ready', function() {
-    // const socket = io("https://cobranza-bot-websockets.onrender.com/");
+    const socket = io("https://cobranza-bot-websockets.onrender.com/");
 
-    // socket.on('connect', () => {
-    //   console.log('connected');
-    // });
+    socket.on('connect', () => {
+      console.log('connected');
+    });
 
     socket.on('test', ({ metadata }) => {
       if(metadata.progress === 100) {
