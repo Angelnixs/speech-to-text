@@ -77,7 +77,7 @@ if ("webkitSpeechRecognition" in window) {
           xhr.open("POST", url);
 
           xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.setRequestHeader("Authorization", "Bearer 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");
+          xhr.setRequestHeader("Authorization", "Bearer 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");
 
           xhr.onreadystatechange = function () {
               if (xhr.readyState === 4) {
@@ -129,7 +129,7 @@ if ("webkitSpeechRecognition" in window) {
     }`;
 
     xhr.send(data);
-}
+  }
 
   navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
     __log('No live audio input: ' + e);

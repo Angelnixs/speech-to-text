@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset='utf-8' />
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js'></script>
+  <script src='jquery.voicerss-tts.min.js'></script>
+  <script src='script.js'></script>
+</head>
+<body>
+  <div>
+    <textarea id="prompt"></textarea>
+  </div>
+  <script>
+    
+    $('#prompt').keyup(function(e){
+      if(e.keyCode == 13){
+        sendMessageChatGPT($(this).val(), (response) => {
+          someText = response.replace(/(\r\n|\n|\r)/gm, "");
+          $.speech({
+            key: '1c04f58196914170a98ff42d613eac34',
+            src: someText,
+            hl: 'es-es',
+            v: 'Diego',
+            r: 1,
+            f: '44khz_16bit_stereo',
+            ssml: false,
+            b64: false,
+          });
+        })
+      }
+    });
+    
+  </script>
+</body>
+</html>
